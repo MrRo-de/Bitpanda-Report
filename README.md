@@ -9,7 +9,7 @@ Mit diesem Python-Skript lässt sich der Bitpanda *.csv-Verlauf analysieren und 
 
 Durch das Python-Script wird eine PDF-Datei mit dem Namen "BP-Report.pdf" mit folgendem Inhalt erstellt.
 
-#### Deckblatt
+### Deckblatt
 
 - Name und Anschrift
 - gehandelte Assets
