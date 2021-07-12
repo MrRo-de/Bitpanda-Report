@@ -1,7 +1,7 @@
 # Bitpanda-Report
 A Python Script to analyze your Bitpanda *.csv History
 
-Mit diesem Python-Skript lässt sich der Bitpanda *.csv-Verlauf analysieren und lesefreundlich darstellen.
+Mit diesem Python-Skript lässt sich der Bitpanda *.csv-Verlauf analysieren und lesefreundlich in einer PDF-Datei darstellen.
 
 
 
@@ -14,6 +14,42 @@ Durch das Python-Script wird eine PDF-Datei mit dem Namen "BP-Report.pdf" mit fo
 - Name und Anschrift
 - gehandelte Assets
 - Verteilung der jeweiligen Asset-Klassen
+
+### Detailierte Transaktionen
+
+- Sortiert nach Asset-Klasse
+--  Fiat Transaktionen
+--  Edelmetall Transaktionen
+--  Cryptowährungen
+--  Aktien
+- Gewinn / Verlust des jeweiligen Assets (bei Verkauf)
+
+### Steuer Details Haltefrist < 1 Jahr (Deutschland)
+
+- Sortiert nach Asset-Klasse
+- Anzeige des zu versteuernden Gewinn / Verlust
+
+### Steuer Zusammenfassung
+
+- Sortiert nach Jahren
+- Berechnung des gesamt zu versteuernden Gewinn / Verlust
+
+### Auflistung des aktuellen Portfolios
+
+- Sortiert nach Asset-Klassen
+-- Kaufdatum
+-- Betrag
+-- Asset Menge
+-- Kaufpreis
+-- Haltedauer
+- Anzeige Asset Menge bei Haltefrist > 1 Jahr
+- Anzeige der Gesamtmenge
+- Anzeige des Durchschnittpreises
+
+### Letzte Seite
+
+- Infos
+
 
 
 ## Anleitung
@@ -28,6 +64,9 @@ Im erscheinenden Pop-Up Fenster klickt ihr nun auf CSV generieren, wartet kurz u
 "bitpanda-trades-DATUM-UHRZEIT.csv"
 
 Jetzt könnt Ihr das Pop-Up Fenster schließen und euch von eurem Bitpanda-Konto ausloggen.
+
+
+### 
 
 
 
@@ -73,17 +112,7 @@ csv_filename = 'bitpanda-trade-DATUM-UHRZEIT.csv'
 ```
 
 
+
+
 <img src="https://user-images.githubusercontent.com/66023319/114274881-b1599080-9a20-11eb-9d5d-3d652f71b881.png" height="200">
-
-Hier als Beispiel mit dem Tankerkönig Adapter und dem Datenpunkt tanken. 
-
-```
-on("tankerkoenig.0.stations.cheapest.e5.feed", function(dp) {
-    var tankePreis = getState("tankerkoenig.0.stations.cheapest.e5.feed").val;
-
-    setState("0_userdata.0.Siri.tanken", "Du zahlst " +tankePreis+ " je Liter.");
-});
-```
-
-Um nun mittels Siri darauf zugreifen zu können erstellen wir auf einem iOS-Gerät ein Kurzbefehl:
 
