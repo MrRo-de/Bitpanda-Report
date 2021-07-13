@@ -42,11 +42,12 @@ def generatePieChart(assets_Account, titleName):
     label_list = []
     for row in range(len(assets_Account)):
         x_list.append(assets_Account[row]["Amount"])
-        label_list.append(assets_Account[row]["Asset"])
+        label_list.append(f'{assets_Account[row]["Asset"]}\n({assets_Account[row]["Amount"]})')
     plt.axis("equal") # Kreisdiagramm rund gestaltet (sonst Standard: oval!)
     plt.pie(x_list, labels=label_list, autopct="%1.1f%%")
     plt.title(titleName)
     plt.savefig(f'{titleName}.png', bbox_inches='tight')
+    plt.close()
 
     return titleName
 
@@ -71,7 +72,7 @@ disclaimer_deu = '- Haftungsausschluss: Alle Angaben ohne Gewähr, Irrtümer und
 
 today = datetime.today()
 print(f"heute ist der {today}\n")
-       
+ 
 full_name = input('Dein Namen:\n')
 street = input('Straße, Hausnummer:\n')
 postcode_city = input('PLZ und Ort:\n')
@@ -79,7 +80,7 @@ postcode_city = input('PLZ und Ort:\n')
 full_name = ''
 street = ''
 postcode_city = ''
-"""
+"""   
 input_file = csv.DictReader(open(csv_path))
 fiat_assets = []
 metal_assets = []
@@ -703,7 +704,7 @@ elif numberOfCharts == 2:
         if count == 0:
             pdf.image('Dein Metal Portfolio.png', 15, 140, 100)
         else:
-            pdf.image('Dein Crypto Portfolio.png', pdf_width-115, 140, 100)
+            pdf.image('Dein Metal Portfolio.png', pdf_width-115, 140, 100)
         count += 1
     if os.path.exists("Dein Crypto Portfolio.png"):
         if count == 0:
@@ -715,7 +716,7 @@ elif numberOfCharts == 2:
         if count == 0:
             pdf.image('Dein Stock Portfolio.png', 15, 140, 100)
         else:
-            pdf.image('Dein Crypto Portfolio.png', pdf_width-115, 140, 100)
+            pdf.image('Dein Stock Portfolio.png', pdf_width-115, 140, 100)
         count += 1
 elif numberOfCharts == 1:
     if os.path.exists("Dein Fiat Portfolio.png"):
@@ -1005,6 +1006,11 @@ def summaryTax(metal, crypto, stock, all_years, fiat):
         else:
             pdf.cell(45, th, f"In {year} sind Gewinne/Verluste im Wert von {'{:.2f}'.format(amount)} {fiat} zu versteuern.")
             pdf.ln(6)
+        
+        pdf.ln(6)
+        pdf.set_font('times', '', 9)
+        pdf.cell(45, th, f"*gezahlte Gebühren werden derzeit noch nicht mit verrechnet, da die *csv Datei keine Asset Preise für Gebühren zur verfügung stellt.", ln=True)
+        
 
 
 years_tax = []
@@ -1149,7 +1155,7 @@ pdf.cell(0, 0, f"{best_adress}\n", ln=True, align = 'C')
 pdf.ln(20)
 pdf.cell(40, 8,f"Vielen Dank.", ln=True)
 pdf.ln(20)
-pdf.cell(40, 8,f"Die Software zur Erstellung dieses PDF findet Ihr unter:", ln=True)
+pdf.cell(40, 8,f"Das Script zur Erstellung dieses PDF findet Ihr unter:", ln=True)
 pdf.ln(5)
 pdf.cell(0, 0,f"{gitlink}", link=gitlink, ln=True, align = 'C')
 pdf.ln(20)
