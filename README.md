@@ -112,7 +112,3 @@ csv_filename = 'bitpanda-trade-DATUM-UHRZEIT.csv'
 ```
 
 
-
-
-<img src="https://user-images.githubusercontent.com/66023319/114274881-b1599080-9a20-11eb-9d5d-3d652f71b881.png" height="200">
-
