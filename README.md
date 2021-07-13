@@ -66,7 +66,17 @@ Im erscheinenden Pop-Up Fenster klickt ihr nun auf CSV generieren, wartet kurz u
 Jetzt könnt Ihr das Pop-Up Fenster schließen und euch von eurem Bitpanda-Konto ausloggen.
 
 
-### 
+### Beim Ausführen des Scripts
+
+Zuerst wird man aufgefordert den Pfad der *.csv Datei einzugeben.
+Dies kann auch via Drag&Drop geschehen, hierbei ist darauf zu achten das vor und nach dem Pfad keine Zusätze wie "" oder '' vorhanden sind.
+Diese entfernen, sonst gibt es eine Fehlermeldung.
+
+Anschließend wird man gebeten Seinen Namen, Anschrift und die PLZ Ort anzugeben. Wenn dies nicht auf dem PDF erscheinen soll, die Felder einfach leer lassen und mit Return/Enter bestätigen.
+
+Abwarten bis das Script durchgelaufen ist.
+
+*Hinweis: Es werden beim Durchlaufen zusätzliche Daten, wie die Kreisdiagramme, erstellt. Diese werden nach dem Beenden des Scripts automatisch wieder gelöscht.
 
 
 
