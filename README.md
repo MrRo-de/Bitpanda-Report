@@ -6,7 +6,7 @@ Mit diesem Python-Skript lässt sich der Bitpanda *.csv-Verlauf analysieren und 
 
 # Hinweis
 
-Aktuell sind mehrere Probleme bekannt an denen ich bereits Arbeite.
+Es gibt nun auch eine Beispiel PDF und CSV Datei von Max Mustermann.
  
 
 ## Was wird Angezeigt?
