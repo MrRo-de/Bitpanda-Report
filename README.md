@@ -6,8 +6,46 @@ Mit diesem Python-Skript lässt sich der Bitpanda *.csv-Verlauf analysieren und 
 
 # Hinweis
 
-Es gibt nun auch eine Beispiel PDF und CSV Datei von Max Mustermann.
- 
+- Es gibt nun auch eine Beispiel PDF und CSV Datei von Max Mustermann.
+
+- Auf MacOS läuft es bei mir ohne Probleme, ich habe unter Windows aber ein merkwürdiges Problem. Windows verändert bei mir die *.csv Datei.
+
+Hierfür gibt es derzeit nur einen Workaround von mir:
+
+- Mit rechtsklick auf die Bitpanda-Report-py Datei und "Edit with IDLE" -> "Edit with IDLE" auswählen
+- Im neuen Fenster, unter "Options" -> "Show Line Numbers" auswählen und zu Zeile 64 - 69 scrollen
+
+```
+if os_Name == 'posix':
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+elif os_Name == 'nt':
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+else:
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+```
+
+- Hierbei ist 'posix' die MacOS Version und 'nt' die Windows Version.
+- Öffne ich nun die *.csv Datei
+
+unter MacOS sieht die *.csv bei mir so aus:
+<img src="![csv-Beispiel](https://user-images.githubusercontent.com/66023319/125809372-26ab5a9a-c3b7-45e1-b837-321e4f84848c.png)" height="200">
+
+- Muss ich den Wert von skiprows= für mein Betriebssystem anpassen, da dieses Skript mit der Zeile "Transaction ID ..." beginnt.
+
+unter Windows sieht die *.csv bei mir so aus:
+<img src="![csv-Beispiel-Win](https://user-images.githubusercontent.com/66023319/125810194-5eb8cee8-6f68-40fb-bf38-786e79fb2244.png)" height="200">
+
+- Also passe ich den Wert für Windows so an:
+```
+if os_Name == 'posix':
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+elif os_Name == 'nt':
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=12)
+else:
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+```
+
+- Über das Menü "File" und "Save" wird die Änderung gespeichert und ich kann das Fenster schließen.
 
 ## Was wird Angezeigt?
 
