@@ -1,0 +1,20 @@
+"Disclaimer: All data is without guarantee, errors and changes are reserved."
+"Max Mustermann, 1990-01-01"
+max@mustermann.de
+"Account opened at: 1/01/19, 08:00 AM"
+"Venue: Bitpanda"
+"Reported by Bitpanda GmbH"
+"Transaction ID",Timestamp,"Transaction Type",In/Out,"Amount Fiat",Fiat,"Amount Asset",Asset,"Asset market price","Asset market price currency","Asset class","Product ID",Fee,"Fee asset",Spread,"Spread Currency"
+Test-ID001,2020-06-13T12:16:15+01:00,deposit,incoming,1000.00,EUR,-,EUR,-,-,Fiat,-,15.00000000,EUR,-,-
+Test-ID002,2020-06-13T12:27:15+01:00,deposit,incoming,1000.00,USD,-,USD,-,-,Fiat,-,15.00000000,USD,-,-
+Test-ID003,2020-06-13T14:13:42+01:00,buy,outgoing,200.00,EUR,1575.54500794,MIOTA,0.13,EUR,Cryptocurrency,13,-,-,-,-
+Test-ID004,2020-09-04T09:15:33+02:00,buy,outgoing,100.00,EUR,1085.44612771,ADA,0.09,EUR,Cryptocurrency,22,-,-,-,-
+Test-ID005,2020-10-21T23:09:43+02:00,deposit,incoming,0,EUR,145.93445300,XRP,0.00,-,Cryptocurrency,8,0.00000000,XRP,-,-
+Test-ID006,2020-10-21T23:19:16+02:00,buy,outgoing,16.61,EUR,50.00000000,MIOTA,0.33,EUR,Cryptocurrency,13,-,-,-,-
+Test-ID007,2020-10-21T23:22:16+02:00,sell,incoming,16.61,EUR,71.00029570,XRP,0.23,EUR,Cryptocurrency,8,-,-,-,-
+Test-ID008,2020-10-21T23:25:51+02:00,sell,incoming,17.53,EUR,74.93415730,XRP,0.23,EUR,Cryptocurrency,8,-,-,-,-
+Test-ID009,2020-12-27T15:41:52+01:00,buy,outgoing,25.00,EUR,295.82364765,BEST,0.08,EUR,Cryptocurrency,33,-,-,-,-
+Test-ID010,2021-03-31T23:56:06+01:00,buy,outgoing,393.54,EUR,549.11934315,Silver,0.72,EUR,Metal,29,-,-,-,-
+Test-ID011,2021-07-03T10:57:43+02:00,buy,outgoing,500.00,EUR,11.10370863,KO,45.03,EUR,"Stock (derivative)",94,-,-,0.41000000,EUR
+Test-ID012,2021-07-03T10:58:15+02:00,buy,outgoing,499.66,EUR,5.02120389,AIR,99.51,EUR,"Stock (derivative)",87,-,-,0.28000000,EUR
+Test-ID013,2021-07-03T10:59:15+02:00,sell,incoming,499.66,EUR,11.10370862,KO,45.00,EUR,"Stock (derivative)",94,-,-,0.28000000,EU

@@ -1,3 +1,4 @@
+#!/usr/bin/env python 
 import csv
 import os
 import io
@@ -59,7 +60,13 @@ if csv_path_to_file == '':
 else:
     csv_Oldpath = os.path.join(csv_path_to_file, csv_filename)
 
-csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+os_Name = os.name
+if os_Name == 'posix':
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+elif os_Name == 'nt':
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+else:
+    csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
 csvDf.to_csv('newTempFile0x123.csv', index=False)
 newPath_input = 'newTempFile0x123.csv'
 csv_path = os.path.join(newPath_input)
@@ -72,7 +79,7 @@ disclaimer_deu = '- Haftungsausschluss: Alle Angaben ohne Gewähr, Irrtümer und
 
 today = datetime.today()
 print(f"heute ist der {today}\n")
- 
+
 full_name = input('Dein Namen:\n')
 street = input('Straße, Hausnummer:\n')
 postcode_city = input('PLZ und Ort:\n')
@@ -80,7 +87,7 @@ postcode_city = input('PLZ und Ort:\n')
 full_name = ''
 street = ''
 postcode_city = ''
-"""   
+""" 
 input_file = csv.DictReader(open(csv_path))
 fiat_assets = []
 metal_assets = []
@@ -252,14 +259,18 @@ for asset in stock_assets:
         stock_list.append({"Asset": asset, "Amount": stock_amount})
 
 #print(stock_list)
-
+#fiat_list = [{'Asset': 'USD', 'Amount': '985.00'}, {'Asset': 'EUR', 'Amount': '-1465.00'}, {'Asset': 'CHZ', 'Amount': '-0.00'}]
 for row in fiat_list:
     if row["Asset"] == 'EUR':
         old = float(row["Amount"])
         calc = old + fiat_paid
         if calc == -0.00:
             calc = 0.00
+        if calc <= 0.00:
+            calc = 0.00
+        
         row["Amount"] = '{:.2f}'.format(calc)
+        
  
 #print(fiat_list)
 
@@ -506,7 +517,6 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
                 temp_out_dict.append({"Datum": row_out['Datum'], "Transaktion": row_out['Transaktion'], "Betrag": '{:.2f}'.format(float(row_out["Betrag"])), "Asset Menge": '{:.6f}'.format(float(row_out["Asset Menge"])), "Asset Preis": '{:.2f}'.format(float(row_out["Asset Preis"])), "Asset": row_out["Asset"], "Gebühren": '{:.6f}'.format(float(row_out["Gebühren"]))})
 
         temp_out_dict = sorted(temp_out_dict, key=lambda k: k['Datum'])
-
         win_loss = 0.00
         temp_win_loss = 0.00
         temp2_win_loss = 0.00
@@ -561,7 +571,7 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
         temp_win_loss = 0.00
         temp_winloss.clear()
 
-        if len(temp_in_dict) > 1:
+        if len(temp_in_dict) > 0:
             for row in temp_in_dict:
                 portfolio_dict.append(row)
                 
@@ -574,7 +584,15 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
                 steuern_crypto = calcCryptoSteuern(asset, steuern_winloss)
             elif asset_class == 'stock':
                 steuern_stock = calcStockSteuern(asset, steuern_winloss)
+        else:
+            if asset_class == 'metal':
+                steuern_metal = [{"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00}]
+            elif asset_class == 'crypto':
+                steuern_crypto = [{"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00}]
+            elif asset_class == 'stock':
+                steuern_stock = [{"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00}]
 
+    
     if asset_class == 'metal':
         return winloss, steuern_metal, portfolio_dict
     if asset_class == 'crypto':
@@ -926,9 +944,12 @@ metal_steuern = sorted(metal_steuern, key=lambda k: (k["verkaufs Jahr"], k["Asse
 crypto_steuern = sorted(crypto_steuern, key=lambda k: (k["verkaufs Jahr"], k["Asset"]))
 stock_steuern = sorted(stock_steuern, key=lambda k: (k["verkaufs Jahr"], k["Asset"]))
 
-generateTaxPage(metal_steuern, 'metal')
-generateTaxPage(crypto_steuern, 'crypto')
-generateTaxPage(stock_steuern, 'stock')
+if metal_steuern[0]["verkaufs Jahr"] != 1990:
+    generateTaxPage(metal_steuern, 'metal')
+if crypto_steuern[0]["verkaufs Jahr"] != 1990:
+    generateTaxPage(crypto_steuern, 'crypto')
+if stock_steuern[0]["verkaufs Jahr"] != 1990:
+    generateTaxPage(stock_steuern, 'stock')
 
 def summaryTax(metal, crypto, stock, all_years, fiat):
 
@@ -1015,11 +1036,14 @@ def summaryTax(metal, crypto, stock, all_years, fiat):
 
 years_tax = []
 for row in metal_steuern:
-    years_tax.append(row['verkaufs Jahr'])
+    if row['verkaufs Jahr'] > 1990:
+        years_tax.append(row['verkaufs Jahr'])
 for row in crypto_steuern:
-    years_tax.append(row['verkaufs Jahr'])
+    if row['verkaufs Jahr'] > 1990:
+        years_tax.append(row['verkaufs Jahr'])
 for row in stock_steuern:
-    years_tax.append(row['verkaufs Jahr'])
+    if row['verkaufs Jahr'] > 1990:
+        years_tax.append(row['verkaufs Jahr'])
 
 years_tax = set(years_tax)
 
@@ -1054,7 +1078,6 @@ def assetsInPortfolio(assets_list, in_dict, asset_class):
         pdf.cell(col_width, th, "HODL Zeit", align='C', border=1)
         pdf.ln(th)
         pdf.set_font('times', '', 9)
-
         temp_asset = ''
         temp_Amount = 0.00
         temp_Price = 0.00
@@ -1062,14 +1085,21 @@ def assetsInPortfolio(assets_list, in_dict, asset_class):
         for row in in_dict:
             diftime = today - datetime.strptime(row["Datum"], '%Y-%m-%d %H:%M:%S') 
             if row["Asset"] != temp_asset:
-                temp_asset = row["Asset"]
                 if temp_Price > 0.00:
-                    pdf.cell(col_width, th, '',  border=1)
-                    pdf.cell(col_width, th, '',  border=1)
-                    pdf.cell(col_width*2, th, f"gesamt: {'{:.6f}'.format(temp_Amount)}", align="R",  border=1)
-                    pdf.cell(col_width, th, f"durchschnitt: {'{:.2f}'.format(temp_Price/temp_Amount)}",  border=1)
-                    pdf.cell(col_width, th, '',  border=1)
+                    col_width = (pdf_width-30)
+                    if hodl_amount > 0.00:
+                        pdf.cell(col_width, th, f"Haltefrist 1 Jahr+: {'{:.6f}'.format(hodl_amount)} {temp_asset}", align="R",  border=1)
+                        pdf.ln(th)
+                    else:
+                        pdf.cell(col_width, th, '',  border=1)
+                        pdf.ln(th)
+                    pdf.cell(col_width, th, f"Investiert: {'{:.2f}'.format(temp_Price)}", align="R", border=1)
                     pdf.ln(th)
+                    pdf.cell(col_width, th, f"Gesamt Menge: {'{:.6f}'.format(temp_Amount)} {temp_asset}", align="R",  border=1)
+                    pdf.ln(th)
+                    pdf.cell(col_width, th, f"Durchschnitt Preis: {'{:.3f}'.format(temp_Price/temp_Amount)}", align="R", border=1)
+                    pdf.ln(th)
+                temp_asset = row["Asset"]
                 pdf.set_font('times', 'B', 10)
                 col_width = (pdf_width-30)
                 pdf.cell(col_width, th, row["Asset"], align='C', border=1)
@@ -1079,6 +1109,7 @@ def assetsInPortfolio(assets_list, in_dict, asset_class):
                 temp_Price = 0.00
                 pdf.ln(th)
             
+            col_width = (pdf_width-30)/6
             pdf.cell(col_width, th, str(row["Datum"]), border=1)
             pdf.cell(col_width, th, str(row["Transaktion"]), border=1)
             pdf.cell(col_width, th, str(row["Betrag"]), border=1)
@@ -1094,22 +1125,29 @@ def assetsInPortfolio(assets_list, in_dict, asset_class):
             if row['Betrag'] != '':
                 temp_Price += float(row["Betrag"])
         
+        col_width = (pdf_width-30)/4
         if temp_Price > 0.00:
+            col_width = (pdf_width-30)
             if hodl_amount > 0.00:
-                pdf.cell(col_width*2, th, f"Haltefrist 1 Jahr+: {'{:.6f}'.format(hodl_amount)}", align="L",  border=1)
+                pdf.cell(col_width, th, f"Haltefrist 1 Jahr+: {'{:.6f}'.format(hodl_amount)} {temp_asset}", align="R",  border=1)
+                pdf.ln(th)
             else:
                 pdf.cell(col_width, th, '',  border=1)
-                pdf.cell(col_width, th, '',  border=1)
-            pdf.cell(col_width*2, th, f"gesamt: {'{:.6f}'.format(temp_Amount)}", align="R",  border=1)
-            pdf.cell(col_width, th, f"durchschnitt: {'{:.2f}'.format(temp_Price/temp_Amount)}",  border=1)
-            pdf.cell(col_width, th, '',  border=1)
+                pdf.ln(th)
+            pdf.cell(col_width, th, f"Investiert: {'{:.2f}'.format(temp_Price)}", align="R", border=1)
+            pdf.ln(th)
+            pdf.cell(col_width, th, f"Gesamt Menge: {'{:.6f}'.format(temp_Amount)} {temp_asset}", align="R",  border=1)
+            pdf.ln(th)
+            pdf.cell(col_width, th, f"Durchschnitt Preis: {'{:.3f}'.format(temp_Price/temp_Amount)}", align="R", border=1)
             pdf.ln(th)
 
 
 if len(metal_portfolio) > 0:
     assetsInPortfolio(metal_list, metal_portfolio, 'Metal')
+
 if len(crypto_portfolio) > 0:
     assetsInPortfolio(crypto_list, crypto_portfolio, 'Crypto')
+
 if len(stock_portfolio) > 0:
     assetsInPortfolio(stock_list, stock_portfolio, 'Aktien')
 
@@ -1160,6 +1198,7 @@ pdf.ln(5)
 pdf.cell(0, 0,f"{gitlink}", link=gitlink, ln=True, align = 'C')
 pdf.ln(20)
 pdf.cell(40, 8,f"Hier könnt Ihr auch gerne unter \"Issues\" einen \"New Issue\" anlegen um mir Fehler und Verbesserungsvorschläge zukommen zu lassen.", ln=True)
-pdf.output('BP-Report.pdf')
+user = os.getlogin()
+pdf.output(f'/Users/{user}/Desktop/BP-Report.pdf')
 
 removeFiles(listOfPNG)
