@@ -135,7 +135,7 @@ Bei Drag&Drop ist es wichtig das alle Sonder- und Leerzeichen entfernt werden.
 Anschließend wird nach eurem Namen und eurer Anschrift gefragt. Dies dient nur zur Personalisierung des Deckblattes.
 Dies kann auch mit Enter/Return übersprungen werden.
 
-Nach dem durchlaufen des Scripts erscheint nun die "Bitpanda-Report.pdf" Datei.
+Nach dem durchlaufen des Scripts erscheint nun die "Bitpanda-Report.pdf" Datei auf eurem Desktop.
 
 
 ### Beim Ausführen des Scripts
