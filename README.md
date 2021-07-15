@@ -28,12 +28,12 @@ else:
 - Öffne ich nun die *.csv Datei
 
 unter MacOS sieht die *.csv bei mir so aus:
-<img src="![csv-Beispiel](https://user-images.githubusercontent.com/66023319/125809372-26ab5a9a-c3b7-45e1-b837-321e4f84848c.png)" height="200">
+<img src="(https://user-images.githubusercontent.com/66023319/125809372-26ab5a9a-c3b7-45e1-b837-321e4f84848c.png)" height="200">
 
 - Muss ich den Wert von skiprows= für mein Betriebssystem anpassen, da dieses Skript mit der Zeile "Transaction ID ..." beginnt.
 
 unter Windows sieht die *.csv bei mir so aus:
-<img src="![csv-Beispiel-Win](https://user-images.githubusercontent.com/66023319/125810194-5eb8cee8-6f68-40fb-bf38-786e79fb2244.png)" height="200">
+<img src="(https://user-images.githubusercontent.com/66023319/125810194-5eb8cee8-6f68-40fb-bf38-786e79fb2244.png)" height="200">
 
 - Also passe ich den Wert für Windows so an:
 ```
