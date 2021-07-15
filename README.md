@@ -4,6 +4,10 @@ A Python Script to analyze your Bitpanda *.csv History
 Mit diesem Python-Skript lässt sich der Bitpanda *.csv-Verlauf analysieren und lesefreundlich in einer PDF-Datei darstellen.
 
 
+# Hinweis
+
+Aktuell sind mehrere Probleme bekannt an denen ich bereits Arbeite.
+ 
 
 ## Was wird Angezeigt?
 
@@ -64,6 +68,34 @@ Im erscheinenden Pop-Up Fenster klickt ihr nun auf CSV generieren, wartet kurz u
 "bitpanda-trades-DATUM-UHRZEIT.csv"
 
 Jetzt könnt Ihr das Pop-Up Fenster schließen und euch von eurem Bitpanda-Konto ausloggen.
+
+### Installation und Benutzung
+
+Sollte noch nicht geschehen müsst Ihr als erstes Python3 installieren.
+Ihr findet es unter www.python.org -> Downloads -> Downlad Python 3.9.6 (aktuelle Version)
+
+Das Script könnt Ihr unter https://github.com/MrRo-de/Bitpanda-Report downloaden, indem Ihr auf den grünen Knopf drückt und Download Zip auswählt.
+Nach erfolgreichem Download müsst Ihr die ZIP Datei noch entpacken.
+
+Nach erfolgreicher Installation und entpacken des Scripts öffnet Ihr die Eingabeaufforderung unter Windows, oder das Terminal unter MacOS.
+Hier navigiert Ihr in den Bitpanda-Report-main Ordner und gebt ein:
+```
+pip3 install -r requirements.txt
+```
+*evtl ist ein Neustart eures Systems notwendig.
+
+Nachdem der pip3 Befehl durchgelaufen ist, könnt Ihr das Script starten:
+```
+python Bitpanda-Report.py
+```
+
+Nach einer kurzen Ladezeit werdet Ihr aufgefordert den Pfad zur *.csv Datei einzufügen. 
+Bei Drag&Drop ist es wichtig das alle Sonder- und Leerzeichen entfernt werden.
+
+Anschließend wird nach eurem Namen und eurer Anschrift gefragt. Dies dient nur zur Personalisierung des Deckblattes.
+Dies kann auch mit Enter/Return übersprungen werden.
+
+Nach dem durchlaufen des Scripts erscheint nun die "Bitpanda-Report.pdf" Datei.
 
 
 ### Beim Ausführen des Scripts
