@@ -1,10 +1,10 @@
 #!/usr/bin/env python 
 import csv
 import os
-import io
+#import io
 import copy
 import pyqrcode
-from datetime import datetime, timedelta
+from datetime import datetime #, timedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 from fpdf import FPDF
@@ -48,6 +48,7 @@ def generatePieChart(assets_Account, titleName):
     plt.pie(x_list, labels=label_list, autopct="%1.1f%%")
     plt.title(titleName)
     plt.savefig(f'{titleName}.png', bbox_inches='tight')
+    #print(f'{titleName} generated')
     plt.close()
 
     return titleName
@@ -281,16 +282,44 @@ for row in fiat_list:
 
 numberOfCharts = 0
 listOfPNG = []
-if len(fiat_list) > 0 and float(fiat_list[0]['Amount']) > 0.00:
+
+temp_fiat_list = copy.deepcopy(fiat_list)
+fiat_list.clear()
+for row in temp_fiat_list:
+    if abs(float(row['Amount'])) != 0.000000:
+        fiat_list.append(row)
+#print(fiat_list)
+if len(fiat_list) > 0:
     listOfPNG.append(generatePieChart(fiat_list, 'Dein Fiat Portfolio'))
     numberOfCharts += 1
-if len(metal_list) > 0 and float(metal_list[0]['Amount']) > 0.00:
+
+temp_metal_list = copy.deepcopy(metal_list)
+metal_list.clear()
+for row in temp_metal_list:
+    if abs(float(row['Amount'])) != 0.000000:
+        metal_list.append(row)
+#print(metal_list)
+if len(metal_list) > 0:
     listOfPNG.append(generatePieChart(metal_list, 'Dein Metal Portfolio'))
     numberOfCharts += 1
-if len(crypto_list) > 0 and float(crypto_list[0]['Amount']) > 0.00:
+
+temp_crypto_list = copy.deepcopy(crypto_list)
+crypto_list.clear()
+for row in temp_crypto_list:
+    if abs(float(row['Amount'])) != 0.000000:
+        crypto_list.append(row)
+#print(crypto_list)
+if len(crypto_list) > 0:
     listOfPNG.append(generatePieChart(crypto_list, 'Dein Crypto Portfolio'))
     numberOfCharts += 1
-if len(stock_list) > 0 and float(stock_list[0]['Amount']) > 0.00:
+
+temp_stock_list = copy.deepcopy(stock_list)
+stock_list.clear()
+for row in temp_stock_list:
+    if abs(float(row['Amount'])) != 0.000000:
+        stock_list.append(row)
+#print(stock_list)
+if len(stock_list) > 0:
     listOfPNG.append(generatePieChart(stock_list, 'Dein Stock Portfolio'))
     numberOfCharts += 1
 
@@ -489,6 +518,9 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
     test = ''
     winloss = []
     steuern_winloss = []
+    steuern_metal = []
+    steuern_crypto = []
+    steuern_stock = []
     temp_winloss = []
     portfolio_dict = []
     for asset in assets:
@@ -517,6 +549,7 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
                 temp_out_dict.append({"Datum": row_out['Datum'], "Transaktion": row_out['Transaktion'], "Betrag": '{:.2f}'.format(float(row_out["Betrag"])), "Asset Menge": '{:.6f}'.format(float(row_out["Asset Menge"])), "Asset Preis": '{:.2f}'.format(float(row_out["Asset Preis"])), "Asset": row_out["Asset"], "Gebühren": '{:.6f}'.format(float(row_out["Gebühren"]))})
 
         temp_out_dict = sorted(temp_out_dict, key=lambda k: k['Datum'])
+
         win_loss = 0.00
         temp_win_loss = 0.00
         temp2_win_loss = 0.00
@@ -529,35 +562,48 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
                 if float(row_out['Asset Menge']) == 0.000000:
                     row_out['Asset Menge'] = row_out['Gebühren']
                 
-                if float(row_out['Asset Menge']) > float(temp_in_dict[0]['Asset Menge']):
-                    temp2_win_loss = 0.00
-                    while float(row_out['Asset Menge']) > float(temp_in_dict[0]['Asset Menge']):
-                        if row_out['Transaktion'] == 'Verkauf':
-                            temp2_win_loss += (float(temp_in_dict[0]['Asset Menge']) * float(row_out['Asset Preis'])) - float(temp_in_dict[0]['Betrag'])
-                        row_out['Betrag'] = '{:.2f}'.format((float(row_out['Asset Menge']) - float(temp_in_dict[0]['Asset Menge'])) * float(row_out['Asset Preis']))
-                        row_out['Asset Menge'] = '{:.6f}'.format(float(row_out['Asset Menge']) - float(temp_in_dict[0]['Asset Menge']))
-                        if len(temp_in_dict) > 0:
-                            del temp_in_dict[0]
-                        else:
-                            temp_in_dict[0]['Betrag'] = 0.00
-                            temp_in_dict[0]['Asset Menge'] = 0.000000
+                if len(temp_in_dict) > 0:
+                    if float(row_out['Asset Menge']) > float(temp_in_dict[0]['Asset Menge']):
+                        temp2_win_loss = 0.00
+                        while float(row_out['Asset Menge']) > float(temp_in_dict[0]['Asset Menge']):
+                            #print(f'1: {len(temp_in_dict)}')
+                            if row_out['Transaktion'] == 'Verkauf':
+                                temp2_win_loss += (float(temp_in_dict[0]['Asset Menge']) * float(row_out['Asset Preis'])) - float(temp_in_dict[0]['Betrag'])
+                            row_out['Betrag'] = '{:.2f}'.format((float(row_out['Asset Menge']) - float(temp_in_dict[0]['Asset Menge'])) * float(row_out['Asset Preis']))
+                            row_out['Asset Menge'] = '{:.6f}'.format(float(row_out['Asset Menge']) - float(temp_in_dict[0]['Asset Menge']))
                             
-                    temp_win_loss += temp2_win_loss
+                            if len(temp_in_dict) > 0:
+                                del temp_in_dict[0]
+                            else:
+                                temp_in_dict[0]['Betrag'] = 0.00
+                                temp_in_dict[0]['Asset Menge'] = 0.000000
+                            
+                            if float(row_out['Asset Menge']) < 0.00000:
+                                #print('break because of Amount')
+                                break
+                            #print(f'2: {len(temp_in_dict)}')
+                            if len(temp_in_dict) == 0:
+                                #print('break because of length')
+                                break
+                            
+                                
+                        temp_win_loss += temp2_win_loss
 
-                if float(row_out['Asset Menge']) == float(temp_in_dict[0]['Asset Menge']):
-                    if row_out['Transaktion'] == 'Verkauf':
-                        temp_win_loss = temp_win_loss + (float(row_out['Betrag']) - float(temp_in_dict[0]['Betrag']))
                     if len(temp_in_dict) > 0:
-                        del temp_in_dict[0]
-                    else:
-                        temp_in_dict[0]['Betrag'] = 0.00
-                        temp_in_dict[0]['Asset Menge'] = 0.000000
-                elif float(row_out['Asset Menge']) < float(temp_in_dict[0]['Asset Menge']):
-                    temp_in_dict[0]['Betrag'] = '{:.2f}'.format((float(temp_in_dict[0]['Asset Menge']) - float(row_out['Asset Menge'])) * float(temp_in_dict[0]['Asset Preis']))
-                    temp_in_dict[0]['Asset Menge'] = '{:.6f}'.format((float(temp_in_dict[0]['Asset Menge']) - float(row_out['Asset Menge'])))
-                    if row_out['Transaktion'] == 'Verkauf':
-                        temp_win_loss = temp_win_loss + (float(row_out['Betrag']) - (float(temp_in_dict[0]['Asset Preis']) * float(row_out['Asset Menge'])))
-                    
+                        if float(row_out['Asset Menge']) == float(temp_in_dict[0]['Asset Menge']):
+                            if row_out['Transaktion'] == 'Verkauf':
+                                temp_win_loss = temp_win_loss + (float(row_out['Betrag']) - float(temp_in_dict[0]['Betrag']))
+                            if len(temp_in_dict) > 0:
+                                del temp_in_dict[0]
+                            else:
+                                temp_in_dict[0]['Betrag'] = 0.00
+                                temp_in_dict[0]['Asset Menge'] = 0.000000
+                        elif float(row_out['Asset Menge']) < float(temp_in_dict[0]['Asset Menge']):
+                            temp_in_dict[0]['Betrag'] = '{:.2f}'.format((float(temp_in_dict[0]['Asset Menge']) - float(row_out['Asset Menge'])) * float(temp_in_dict[0]['Asset Preis']))
+                            temp_in_dict[0]['Asset Menge'] = '{:.6f}'.format((float(temp_in_dict[0]['Asset Menge']) - float(row_out['Asset Menge'])))
+                            if row_out['Transaktion'] == 'Verkauf':
+                                temp_win_loss = temp_win_loss + (float(row_out['Betrag']) - (float(temp_in_dict[0]['Asset Preis']) * float(row_out['Asset Menge'])))
+
             win_loss += temp_win_loss
             if hint == True:
                 steuern_winloss.append({"Asset": f'{asset}*', "HODL": days.days, "Jahr": year.year, "winLoss": '{:.2f}'.format(temp_win_loss)})
@@ -573,7 +619,8 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
 
         if len(temp_in_dict) > 0:
             for row in temp_in_dict:
-                portfolio_dict.append(row)
+                if float(row['Asset Menge']) > 0.0:
+                    portfolio_dict.append(row)
                 
         winloss.append({"Asset": asset, "winLoss": '{:.2f}'.format(win_loss)})
 
@@ -586,11 +633,11 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
                 steuern_stock = calcStockSteuern(asset, steuern_winloss)
         else:
             if asset_class == 'metal':
-                steuern_metal = [{"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00}]
+                steuern_metal.append({"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00})
             elif asset_class == 'crypto':
-                steuern_crypto = [{"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00}]
+                steuern_crypto.append({"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00})
             elif asset_class == 'stock':
-                steuern_stock = [{"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00}]
+                steuern_stock.append({"Asset": asset, "verkaufs Jahr": 1990, "Betrag": 0.00})
 
     
     if asset_class == 'metal':
@@ -598,7 +645,7 @@ def calcWinLoss(in_dict, assets, out_dict, asset_class):
     if asset_class == 'crypto':
         return winloss, steuern_crypto, portfolio_dict
     if asset_class == 'stock':
-        return winloss, steuern_stock, portfolio_dict    
+        return winloss, steuern_stock, portfolio_dict
 
 
 ################################################################################################
@@ -636,7 +683,16 @@ fiat_assets = sorted(fiat_assets, key=lambda k: k)
 metal_assets = sorted(metal_assets, key=lambda k: k)
 crypto_assets = sorted(crypto_assets, key=lambda k: k)
 stock_assets = sorted(stock_assets, key=lambda k: k)
-
+'''
+if os.path.exists("Dein Fiat Portfolio.png"):
+    print('Fiat PNG exists')
+if os.path.exists("Dein Crypto Portfolio.png"):
+    print('Crypto PNG exists')
+if os.path.exists("Dein Metal Portfolio.png"):
+    print('Metal PNG exists')
+if os.path.exists("Dein Stock Portfolio.png"):
+    print('Stock PNG exists')
+'''
 # Add text
 # w = width
 # h = height
@@ -1059,6 +1115,7 @@ summaryTax(metal_steuern, crypto_steuern, stock_steuern, years_tax, currency)
 
 def assetsInPortfolio(assets_list, in_dict, asset_class):
     
+    #print(assets_list)
     if len(in_dict) > 0:
         pdf.add_page()
         pdf.ln(5)
@@ -1083,7 +1140,7 @@ def assetsInPortfolio(assets_list, in_dict, asset_class):
         temp_Price = 0.00
         hodl_amount = 0.00
         for row in in_dict:
-            diftime = today - datetime.strptime(row["Datum"], '%Y-%m-%d %H:%M:%S') 
+            diftime = today - datetime.strptime(row["Datum"], '%Y-%m-%d %H:%M:%S')
             if row["Asset"] != temp_asset:
                 if temp_Price > 0.00:
                     col_width = (pdf_width-30)
@@ -1143,13 +1200,34 @@ def assetsInPortfolio(assets_list, in_dict, asset_class):
 
 
 if len(metal_portfolio) > 0:
-    assetsInPortfolio(metal_list, metal_portfolio, 'Metal')
+    fin_metal_portfolio = []
+    temp_metal_list = []
+    for row in metal_list:
+        temp_metal_list.append(row['Asset'])
+    for row in metal_portfolio:
+        if row['Asset'] in temp_metal_list:
+            fin_metal_portfolio.append(row)
+    assetsInPortfolio(metal_list, fin_metal_portfolio, 'Metal')
 
 if len(crypto_portfolio) > 0:
-    assetsInPortfolio(crypto_list, crypto_portfolio, 'Crypto')
+    fin_crypto_portfolio = []
+    temp_crypto_list = []
+    for row in crypto_list:
+        temp_crypto_list.append(row['Asset'])
+    for row in crypto_portfolio:
+        if row['Asset'] in temp_crypto_list:
+            fin_crypto_portfolio.append(row)
+    assetsInPortfolio(crypto_list, fin_crypto_portfolio, 'Crypto')
 
 if len(stock_portfolio) > 0:
-    assetsInPortfolio(stock_list, stock_portfolio, 'Aktien')
+    fin_stock_portfolio = []
+    temp_stock_list = []
+    for row in stock_list:
+        temp_stock_list.append(row['Asset'])
+    for row in stock_portfolio:
+        if row['Asset'] in temp_stock_list:
+            fin_stock_portfolio.append(row)
+    assetsInPortfolio(stock_list, fin_stock_portfolio, 'Aktien')
 
 
 ################################################################################################
@@ -1198,7 +1276,7 @@ pdf.ln(5)
 pdf.cell(0, 0,f"{gitlink}", link=gitlink, ln=True, align = 'C')
 pdf.ln(20)
 pdf.cell(40, 8,f"Hier könnt Ihr auch gerne unter \"Issues\" einen \"New Issue\" anlegen um mir Fehler und Verbesserungsvorschläge zukommen zu lassen.", ln=True)
-user = os.getlogin()
+user = os.environ['USER']
 pdf.output(f'/Users/{user}/Desktop/BP-Report.pdf')
 
 removeFiles(listOfPNG)
