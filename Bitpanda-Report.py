@@ -64,13 +64,14 @@ else:
 userKey = 'USER'
 os_Name = os.name
 if os_Name == 'posix':
-    userkey = 'USER'
+    userKey = 'USER'
     csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
 elif os_Name == 'nt':
-    userkey = 'USERNAME'
+    userKey = 'USERNAME'
     csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
 else:
     csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
+    userKey = 'USERNAME'
 csvDf.to_csv('newTempFile0x123.csv', index=False)
 newPath_input = 'newTempFile0x123.csv'
 csv_path = os.path.join(newPath_input)
