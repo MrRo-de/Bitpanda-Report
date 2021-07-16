@@ -61,10 +61,13 @@ if csv_path_to_file == '':
 else:
     csv_Oldpath = os.path.join(csv_path_to_file, csv_filename)
 
+userKey = 'USER'
 os_Name = os.name
 if os_Name == 'posix':
+    userkey = 'USER'
     csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
 elif os_Name == 'nt':
+    userkey = 'USERNAME'
     csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
 else:
     csvDf = pd.read_csv(csv_Oldpath, skiprows=6)
@@ -1276,7 +1279,7 @@ pdf.ln(5)
 pdf.cell(0, 0,f"{gitlink}", link=gitlink, ln=True, align = 'C')
 pdf.ln(20)
 pdf.cell(40, 8,f"Hier könnt Ihr auch gerne unter \"Issues\" einen \"New Issue\" anlegen um mir Fehler und Verbesserungsvorschläge zukommen zu lassen.", ln=True)
-user = os.environ['USER']
+user = os.environ[userKey]
 pdf.output(f'/Users/{user}/Desktop/BP-Report.pdf')
 
 removeFiles(listOfPNG)
