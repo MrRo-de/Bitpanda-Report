@@ -3,4 +3,4 @@ matplotlib==3.4.2
 PyQRCode==1.2.1
 pandas==1.2.3
 fpdf==1.7.2
-pypng=0.0.20
+pypng==0.0.20
